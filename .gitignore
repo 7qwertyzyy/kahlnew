@@ -1,0 +1,42 @@
+# Dependencies
+node_modules/
+.pnp/
+.pnp.js
+
+# Next.js
+.next/
+out/
+frontend/.next/
+frontend/out/
+frontend/tsconfig.tsbuildinfo
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+!frontend/.env.example
+!backend/.env.example
+
+# Local data and uploads
+backend/data/*.db
+backend/data/*.sqlite
+backend/data/uploads/
+
+# Logs and local tooling
+*.log
+frontend/dev-server.*.log
+.vercel/
+.claude/settings.local.json
+
+# OS/editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
