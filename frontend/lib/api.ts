@@ -11,6 +11,7 @@ import type {
 
 const API_BASE =
   process.env.NEXT_PUBLIC_API_URL ??
+  process.env.NEXT_PUBLIC_BACKEND_URL ??
   (process.env.NODE_ENV === "production" ? "" : "http://localhost:8000");
 
 async function apiFetch<T>(path: string, init?: RequestInit): Promise<T> {
