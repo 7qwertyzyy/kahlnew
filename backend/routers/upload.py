@@ -15,6 +15,7 @@ from services.risk_calculator import (
     berechne_risikostufe,
     detect_flags,
     extrahiere_strassen,
+    extrahiere_strassen_kategorien,
 )
 
 DEFAULT_UPLOAD_DIR = (
@@ -34,12 +35,16 @@ def _get_db_columns() -> set[str]:
         return {row[1] for row in conn.execute("PRAGMA table_info(permits)")}
 
 
-def _enrich_and_save(data: dict, file_path: Path, dateityp: str) -> Permit:
+def _enrich_and_save(data: dict, file_path: Path, dateityp: str, dokument_volltext: str | None = None) -> Permit:
     # Flags aus Auflagen ableiten (falls KI sie nicht gesetzt hat)
     flags = detect_flags(data.get("auflagen", []))
     for k, v in flags.items():
         if not data.get(k):
             data[k] = v
+
+    # Volltext des Dokuments speichern
+    if dokument_volltext:
+        data["dokument_volltext"] = dokument_volltext
 
     # Straßenkennzeichen aus Streckentext extrahieren
     erkannte = extrahiere_strassen(
@@ -50,6 +55,19 @@ def _enrich_and_save(data: dict, file_path: Path, dateityp: str) -> Permit:
     )
     if not data.get("erkannte_strassen"):
         data["erkannte_strassen"] = erkannte
+
+    # Straßen nach Kategorie aufteilen (Autobahnen, Bundesstraßen, Kreisstraßen)
+    kategorien = extrahiere_strassen_kategorien(
+        data.get("strecke_volltext"),
+        data.get("strecke", []),
+        data.get("erkannte_strassen", []),
+    )
+    if not data.get("autobahnen"):
+        data["autobahnen"] = kategorien["autobahnen"]
+    if not data.get("bundesstrassen"):
+        data["bundesstrassen"] = kategorien["bundesstrassen"]
+    if not data.get("kreisstrassen"):
+        data["kreisstrassen"] = kategorien["kreisstrassen"]
 
     # Auflagenstärke berechnen
     punkte, stufe = berechne_auflagenstaerke(
@@ -153,7 +171,7 @@ async def upload_pdf(file: UploadFile = File(...)):
     data = extract_permit_data(text, file.filename)
 
     try:
-        return _enrich_and_save(data, save_path, "pdf")
+        return _enrich_and_save(data, save_path, "pdf", dokument_volltext=text)
     except Exception as e:
         traceback.print_exc()
         raise HTTPException(
@@ -179,7 +197,7 @@ async def upload_batch(files: list[UploadFile] = File(...)):
 
         data = extract_permit_data(text, file.filename)
         try:
-            permit = _enrich_and_save(data, save_path, "pdf")
+            permit = _enrich_and_save(data, save_path, "pdf", dokument_volltext=text)
             results.append(permit)
         except Exception:
             traceback.print_exc()

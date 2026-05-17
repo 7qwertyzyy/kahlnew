@@ -1,0 +1,245 @@
+@import "tailwindcss";
+
+:root {
+  --color-bg: #ffffff;
+  --color-surface: #f8f8f8;
+  --color-surface-strong: #eeeeee;
+  --color-text: #1a1a1a;
+  --color-text-muted: #525252;
+  --color-border: #d8d8d8;
+  --color-primary: #b5131d;
+  --color-primary-hover: #951018;
+  --color-secondary: #004f36;
+  --color-secondary-hover: #003b28;
+  --color-danger-surface: #fff1f1;
+  --color-danger-text: #8f0f17;
+  --logo-filter: none;
+  color-scheme: light;
+}
+
+.dark {
+  --color-bg: #121212;
+  --color-surface: #1e1e1e;
+  --color-surface-strong: #2a2a2a;
+  --color-text: #eeeeee;
+  --color-text-muted: #b8b8b8;
+  --color-border: #3a3a3a;
+  --color-primary: #b5131d;
+  --color-primary-hover: #d01824;
+  --color-secondary: #004f36;
+  --color-secondary-hover: #05734f;
+  --color-danger-surface: rgba(181, 19, 29, 0.16);
+  --color-danger-text: #ff9aa1;
+  --logo-filter: brightness(1.12) contrast(1.08);
+  color-scheme: dark;
+}
+
+html,
+body,
+#__next {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.app-body {
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+
+.brand-logo {
+  filter: var(--logo-filter);
+}
+
+.nav-theme-toggle {
+  background: var(--color-surface-strong);
+  border: 1px solid var(--color-border);
+}
+
+.nav-theme-thumb {
+  background: var(--color-primary);
+}
+
+/* Legacy – kept for reference */
+.theme-switch {
+  border: 1px solid var(--color-border);
+  background: var(--color-surface-strong);
+  color: var(--color-text);
+}
+.theme-switch-thumb {
+  background: var(--color-primary);
+}
+
+/* Existing Tailwind utility compatibility for global theme rollout */
+.bg-gray-950,
+.bg-gray-900 {
+  background-color: var(--color-surface) !important;
+}
+.bg-gray-900\/95 {
+  background-color: color-mix(in srgb, var(--color-surface) 95%, transparent) !important;
+}
+.bg-gray-900\/40,
+.bg-gray-800,
+.bg-gray-800\/50,
+.hover\:bg-gray-800\/50:hover,
+.hover\:bg-gray-800\/70:hover,
+.bg-gray-700,
+.hover\:bg-gray-700:hover,
+.hover\:bg-gray-600:hover {
+  background-color: var(--color-surface-strong) !important;
+}
+.bg-blue-600,
+.bg-blue-700,
+.bg-blue-800,
+.hover\:bg-blue-500:hover,
+.hover\:bg-blue-600:hover,
+.hover\:bg-blue-700:hover,
+.hover\:bg-blue-800:hover {
+  background-color: var(--color-primary) !important;
+}
+.bg-green-900\/50,
+.bg-green-900\/40,
+.bg-green-800,
+.bg-emerald-900\/50 {
+  background-color: color-mix(in srgb, var(--color-secondary) 22%, transparent) !important;
+}
+.bg-red-900\/40,
+.bg-red-900\/50 {
+  background-color: var(--color-danger-surface) !important;
+}
+.text-white,
+.text-gray-50,
+.text-gray-100,
+.text-gray-200,
+.text-gray-300 {
+  color: var(--color-text) !important;
+}
+.text-gray-400,
+.text-gray-500 {
+  color: var(--color-text-muted) !important;
+}
+.text-blue-300,
+.text-blue-400,
+.hover\:text-white:hover {
+  color: var(--color-primary) !important;
+}
+.text-green-300,
+.text-green-400,
+.text-emerald-300,
+.text-emerald-400 {
+  color: var(--color-secondary) !important;
+}
+.text-red-300,
+.text-red-400 {
+  color: var(--color-danger-text) !important;
+}
+.border-gray-600,
+.border-gray-700,
+.border-gray-800,
+.border-blue-500,
+.border-red-700,
+.border-green-700 {
+  border-color: var(--color-border) !important;
+}
+.border-b-gray-700 {
+  border-bottom-color: var(--color-border) !important;
+}
+input,
+select,
+textarea {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+/* Sidebar scrollbar */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+}
+
+/* Mapbox geocoder theme overrides */
+.mapboxgl-ctrl-geocoder {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-shadow: none !important;
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0.5rem !important;
+  min-width: unset !important;
+}
+.mapboxgl-ctrl-geocoder input {
+  color: var(--color-text) !important;
+  background: transparent !important;
+  font-size: 0.875rem !important;
+  height: 36px !important;
+}
+.mapboxgl-ctrl-geocoder input::placeholder {
+  color: var(--color-text-muted) !important;
+}
+.mapboxgl-ctrl-geocoder .suggestions {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  color: var(--color-text) !important;
+}
+.mapboxgl-ctrl-geocoder .suggestions li:hover,
+.mapboxgl-ctrl-geocoder .suggestions .active > a {
+  background: var(--color-surface-strong) !important;
+  color: var(--color-text) !important;
+}
+.mapboxgl-ctrl-geocoder .suggestions a {
+  color: var(--color-text) !important;
+}
+.mapboxgl-ctrl-geocoder--icon {
+  fill: var(--color-text-muted) !important;
+  top: 8px !important;
+}
+.mapboxgl-ctrl-geocoder--button {
+  background: transparent !important;
+}
+.mapboxgl-ctrl-geocoder--icon-search {
+  top: 8px !important;
+  left: 7px !important;
+}
+
+/* Popup theme */
+.mapboxgl-popup-content {
+  background: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 0.5rem !important;
+  padding: 0.75rem !important;
+  max-width: 280px !important;
+  font-size: 0.8rem !important;
+  line-height: 1.4 !important;
+}
+.mapboxgl-popup-tip {
+  border-top-color: var(--color-surface) !important;
+  border-bottom-color: var(--color-surface) !important;
+}
+.mapboxgl-popup-close-button {
+  color: var(--color-text-muted) !important;
+  font-size: 1rem !important;
+  line-height: 1 !important;
+  padding: 4px 6px !important;
+}
+.mapboxgl-popup-close-button:hover {
+  background: var(--color-surface-strong) !important;
+  color: var(--color-text) !important;
+}

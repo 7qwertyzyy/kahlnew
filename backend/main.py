@@ -3,7 +3,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from database.db import init_db
-from routers import permits, upload, matching, health, anfragen
+from routers import permits, upload, matching, health, anfragen, routes
 
 app = FastAPI(title="Kahl Genehmigungs-API", version="0.1.0")
 
@@ -27,6 +27,7 @@ app.include_router(upload.router, prefix="/api/upload", tags=["upload"])
 app.include_router(permits.router, prefix="/api/permits", tags=["permits"])
 app.include_router(matching.router, prefix="/api/matching", tags=["matching"])
 app.include_router(anfragen.router, prefix="/api/anfragen", tags=["anfragen"])
+app.include_router(routes.router, prefix="/api/routes", tags=["routes"])
 
 
 @app.on_event("startup")

@@ -1,0 +1,115 @@
+{
+  "_comment": "Beispieldaten für Brückenrestriktionen. Produktiveinsatz: Overpass API (OSM-Tags maxweight/maxheight/maxwidth) oder BASt-Daten (Bundesanstalt für Straßenwesen).",
+  "bridges": [
+    {
+      "id": "br-001",
+      "name": "Rheinbrücke Leverkusen (A1)",
+      "road": "A1",
+      "coordinates": [6.9869, 51.0394],
+      "max_weight_t": 44,
+      "max_height_m": 4.0,
+      "max_width_m": 3.0,
+      "source": "Straßen.NRW",
+      "notes": "Bekannte Sperrung für Fahrzeuge über 3,00 m Breite. Schwertransporte müssen über A3/A4 umgeleitet werden."
+    },
+    {
+      "id": "br-002",
+      "name": "Rheinbrücke Duisburg-Neuenkamp (A40)",
+      "road": "A40",
+      "coordinates": [6.7276, 51.4286],
+      "max_weight_t": 60,
+      "max_height_m": 4.5,
+      "max_width_m": 4.5,
+      "source": "Straßen.NRW",
+      "notes": "Neubau in Planung. Aktuelle Brücke mit Lastbeschränkung für Fahrzeuge über 60 t."
+    },
+    {
+      "id": "br-003",
+      "name": "Rheinbrücke Duisburg-Beeckerwerth (A42)",
+      "road": "A42",
+      "coordinates": [6.7100, 51.4886],
+      "max_weight_t": 48,
+      "max_height_m": 4.2,
+      "max_width_m": 4.0,
+      "source": "Straßen.NRW",
+      "notes": "Eingeschränkte Durchfahrt für Schwerlastverkehr. Vorherige Genehmigung erforderlich."
+    },
+    {
+      "id": "br-004",
+      "name": "Rheinbrücke Emmerich (A3)",
+      "road": "A3",
+      "coordinates": [6.2450, 51.8390],
+      "max_weight_t": 80,
+      "max_height_m": 4.5,
+      "max_width_m": 5.0,
+      "source": "Straßen.NRW",
+      "notes": "Größte Hängebrücke Deutschlands. Generell für Schwertransporte geeignet bei entsprechender Genehmigung."
+    },
+    {
+      "id": "br-005",
+      "name": "Hochbrücke Rendsburg (A7)",
+      "road": "A7",
+      "coordinates": [9.6621, 54.2988],
+      "max_weight_t": 50,
+      "max_height_m": 4.0,
+      "max_width_m": 3.75,
+      "source": "Deges / BMDV",
+      "notes": "Höhenrestriktion beachten. Windsperrungen bei Stärke 8+ möglich."
+    },
+    {
+      "id": "br-006",
+      "name": "Fehmarnsundbrücke (B207 / E47)",
+      "road": "B207",
+      "coordinates": [11.1980, 54.4320],
+      "max_weight_t": 40,
+      "max_height_m": 3.8,
+      "max_width_m": 3.5,
+      "source": "Deges / SH",
+      "notes": "Windsperrungen häufig. Max. Höhe 3,80 m strikt einzuhalten."
+    },
+    {
+      "id": "br-007",
+      "name": "Nördliche Hochstraße Ludwigshafen (B37)",
+      "road": "B37",
+      "coordinates": [8.4350, 49.4910],
+      "max_weight_t": 25,
+      "max_height_m": 3.8,
+      "max_width_m": 3.0,
+      "source": "Landesbetrieb Mobilität RLP",
+      "notes": "Dringend sanierungsbedürftig. Schwere Fahrzeuge über 25 t VERBOTEN. Sperrung geplant."
+    },
+    {
+      "id": "br-008",
+      "name": "Saalebrücke Halle (A14)",
+      "road": "A14",
+      "coordinates": [11.9670, 51.5120],
+      "max_weight_t": 60,
+      "max_height_m": 4.5,
+      "max_width_m": 4.0,
+      "source": "Deges / SMWA",
+      "notes": "Neubauabschnitt. Keine besonderen Einschränkungen für Regelmaße."
+    },
+    {
+      "id": "br-009",
+      "name": "Moselbrücke Winningen (A61)",
+      "road": "A61",
+      "coordinates": [7.5150, 50.3050],
+      "max_weight_t": 55,
+      "max_height_m": 4.2,
+      "max_width_m": 4.0,
+      "source": "Landesbetrieb Mobilität RLP",
+      "notes": "Älteres Bauwerk. Tragfähigkeit für Sondertransporte prüfen."
+    },
+    {
+      "id": "br-010",
+      "name": "Rader Hochbrücke (A7)",
+      "road": "A7",
+      "coordinates": [9.8450, 54.2650],
+      "max_weight_t": 44,
+      "max_height_m": 4.0,
+      "max_width_m": 3.75,
+      "source": "Deges",
+      "notes": "Sanierungsbedarf. Lastbeschränkung für Fahrzeuge über 44 t. Sperrungen nachts möglich."
+    }
+  ]
+}

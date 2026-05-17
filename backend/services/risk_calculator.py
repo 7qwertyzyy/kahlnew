@@ -139,3 +139,45 @@ def extrahiere_strassen(strecke: list[str], auflagen: list[str], startort: str |
     pattern = r'\b(A\d{1,3}|B\d{1,3}|E\d{1,3}|L\d{1,4}|K\d{1,4})\b'
     found = re.findall(pattern, combined, re.IGNORECASE)
     return sorted(set(s.upper() for s in found))
+
+
+def normalisiere_strassenkennzeichen(raw: str) -> str:
+    """Normalize road identifier: 'A 57' -> 'A57', 'B 75' -> 'B75'."""
+    return re.sub(r'^([AaBbEeLlKk])\s+(\d+)', lambda m: m.group(1).upper() + m.group(2), raw.strip())
+
+
+def extrahiere_strassen_kategorien(
+    strecke_volltext: str | None,
+    strecke: list[str],
+    erkannte_strassen: list[str],
+) -> dict:
+    """
+    Derives autobahnen, bundesstrassen, kreisstrassen from available route data.
+    Returns dict with keys: autobahnen, bundesstrassen, kreisstrassen.
+    """
+    combined = " ".join(filter(None, [strecke_volltext] + strecke + erkannte_strassen))
+    pattern = r'\b([AaBbKkLlEe])\s*(\d{1,4})\b'
+    matches = re.findall(pattern, combined)
+
+    autobahnen: list[str] = []
+    bundesstrassen: list[str] = []
+    kreisstrassen: list[str] = []
+    seen: set[str] = set()
+
+    for prefix, number in matches:
+        normalized = prefix.upper() + number
+        if normalized in seen:
+            continue
+        seen.add(normalized)
+        if prefix.upper() == "A":
+            autobahnen.append(normalized)
+        elif prefix.upper() == "B":
+            bundesstrassen.append(normalized)
+        elif prefix.upper() in ("K", "L"):
+            kreisstrassen.append(normalized)
+
+    return {
+        "autobahnen": autobahnen,
+        "bundesstrassen": bundesstrassen,
+        "kreisstrassen": kreisstrassen,
+    }

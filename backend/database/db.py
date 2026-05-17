@@ -13,6 +13,8 @@ SCHEMA_PATH = Path(__file__).parent / "schema.sql"
 
 LIST_FIELDS = [
     "kennzeichen", "strecke", "erkannte_strassen",
+    "autobahnen", "bundesstrassen", "kreisstrassen",
+    "anschlussstellen", "strassen_sequenz",
     "auflagen", "behoerden", "besonderheiten",
 ]
 
@@ -64,6 +66,16 @@ def _migrate(conn: sqlite3.Connection):
         "geprueft_von": "TEXT",
         "geprueft_am": "DATETIME",
         "kommentare": "TEXT",
+        "autobahnen": "TEXT DEFAULT '[]'",
+        "bundesstrassen": "TEXT DEFAULT '[]'",
+        "kreisstrassen": "TEXT DEFAULT '[]'",
+        "anschlussstellen": "TEXT DEFAULT '[]'",
+        "strassen_sequenz": "TEXT DEFAULT '[]'",
+        "strecke_volltext": "TEXT",
+        "dokument_volltext": "TEXT",
+        "auflagen_volltext": "TEXT",
+        "start_location_name": "TEXT",
+        "ziel_location_name": "TEXT",
     }
     for col, col_def in new_cols.items():
         if col not in existing:

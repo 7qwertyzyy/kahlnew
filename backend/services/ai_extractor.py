@@ -48,6 +48,44 @@ Rules for "auflagen":
 Rules for "strecke":
 - Extract as short waypoints: ["A3 AS Frankfurt-Süd", "B8 Richtung Hanau", ...], not full sentences.
 
+Rules for "autobahnen":
+- Extract ONLY Autobahn identifiers from the route section, NORMALIZED (remove spaces): "A 57" → "A57", "A57" stays "A57".
+- Result: ["A57", "A42", "A3", "A2", "A1"] — ordered as they appear in the route.
+
+Rules for "bundesstrassen":
+- Extract ONLY Bundesstraßen identifiers, NORMALIZED: "B 75" → "B75".
+- Result: ["B75"]
+
+Rules for "kreisstrassen":
+- Extract ONLY Kreisstraßen (K-roads), NORMALIZED: "K 20" → "K20".
+- Result: ["K20"]
+
+Rules for "anschlussstellen":
+- Extract interchange and junction names: "Anschlussstelle", "AS", "Autobahnkreuz", "AK", "Autobahndreieck", "AD".
+- Include the full name: "AS Krefeld Gartenstadt", "AK Kamp Lintfort", "AD Hamburg Südost".
+- Result: ["AS Krefeld Gartenstadt", "AK Kamp Lintfort", ...]
+
+Rules for "strassen_sequenz":
+- Ordered list of ALL roads from start to end as they appear in the route description.
+- Include ALL road types: local streets, Autobahnen, Bundesstraßen, Kreisstraßen.
+- Result: ["Siempelkampstraße", "Hülser Str.", "A57", "A42", "A3", "A2", "A1", ...]
+
+Rules for "strecke_volltext":
+- Copy the COMPLETE route description text verbatim from the document (the section with Start/Ziel and road names).
+- null if no route text found.
+
+Rules for "auflagen_volltext":
+- Copy the COMPLETE conditions/requirements section verbatim from the document.
+- null if no conditions section found.
+
+Rules for "start_location_name":
+- Text in curly braces {} found after the start address, e.g. "{Siempelkamp Gießerei}" → "Siempelkamp Gießerei".
+- null if not found.
+
+Rules for "ziel_location_name":
+- Text in curly braces {} found after the destination address.
+- null if not found.
+
 JSON schema:
 {
   "dateiname": null,
@@ -57,8 +95,10 @@ JSON schema:
   "kunde": null,
   "startort": null,
   "start_bundesland": null,
+  "start_location_name": null,
   "zielort": null,
   "ziel_bundesland": null,
+  "ziel_location_name": null,
   "gueltig_von": null,
   "gueltig_bis": null,
   "fahrzeug_laenge_m": null,
@@ -69,6 +109,13 @@ JSON schema:
   "kennzeichen": [],
   "strecke": [],
   "erkannte_strassen": [],
+  "autobahnen": [],
+  "bundesstrassen": [],
+  "kreisstrassen": [],
+  "anschlussstellen": [],
+  "strassen_sequenz": [],
+  "strecke_volltext": null,
+  "auflagen_volltext": null,
   "auflagen": [],
   "behoerden": [],
   "besonderheiten": [],
@@ -86,11 +133,15 @@ Document:
 EMPTY_PERMIT = {
     "dateiname": None, "genehmigungsnummer": None, "antragsnummer": None,
     "genehmigungsart": None, "kunde": None, "startort": None,
-    "start_bundesland": None, "zielort": None, "ziel_bundesland": None,
+    "start_bundesland": None, "start_location_name": None,
+    "zielort": None, "ziel_bundesland": None, "ziel_location_name": None,
     "gueltig_von": None, "gueltig_bis": None,
     "fahrzeug_laenge_m": None, "fahrzeug_breite_m": None,
     "fahrzeug_hoehe_m": None, "gesamtgewicht_t": None, "achslast_t": None,
     "kennzeichen": [], "strecke": [], "erkannte_strassen": [],
+    "autobahnen": [], "bundesstrassen": [], "kreisstrassen": [],
+    "anschlussstellen": [], "strassen_sequenz": [],
+    "strecke_volltext": None, "auflagen_volltext": None,
     "auflagen": [], "behoerden": [], "besonderheiten": [],
     "begleitfahrzeug_erforderlich": False, "polizei_erforderlich": False,
     "nachtfahrt_erforderlich": False, "ki_zusammenfassung": None,

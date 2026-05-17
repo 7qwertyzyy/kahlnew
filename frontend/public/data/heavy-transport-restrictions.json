@@ -1,0 +1,101 @@
+{
+  "_comment": "Beispieldaten für Schwertransportverbote und -beschränkungen. Produktiveinsatz: Landesstraßenbehörden (z.B. Straßen.NRW, BMDV-Genehmigungssystem) oder VEMAGS-Daten.",
+  "restrictions": [
+    {
+      "id": "str-001",
+      "road": "B288",
+      "segment": "Krefeld — Duisburg-Rheinhausen",
+      "type": "width_restriction",
+      "max_width_m": 3.0,
+      "max_weight_t": null,
+      "max_height_m": null,
+      "reason": "Brückenbauwerk Rheinquerung mit historischer Breitenbeschränkung",
+      "source": "Straßen.NRW",
+      "coordinates": [[6.5500, 51.3400], [6.7200, 51.4100]]
+    },
+    {
+      "id": "str-002",
+      "road": "A1",
+      "segment": "AS Leverkusen-West — AS Leverkusen-Mitte",
+      "type": "width_restriction",
+      "max_width_m": 3.0,
+      "max_weight_t": 44,
+      "max_height_m": 4.0,
+      "reason": "Rheinbrücke Leverkusen — marodes Bauwerk, Vollsperrung für Fahrzeuge über 3 m Breite seit 2014",
+      "source": "Straßen.NRW / Bundesministerium für Verkehr",
+      "coordinates": [[6.9700, 51.0200], [7.0100, 51.0500]]
+    },
+    {
+      "id": "str-003",
+      "road": "B37",
+      "segment": "Ludwigshafen Hochstraße Nord — Stadtmitte",
+      "type": "weight_restriction",
+      "max_width_m": 3.0,
+      "max_weight_t": 25,
+      "max_height_m": 3.8,
+      "reason": "Sanierungsbedürftige Stadtautobahn. Schwertransporte über 25 t verboten.",
+      "source": "Landesbetrieb Mobilität Rheinland-Pfalz",
+      "coordinates": [[8.4200, 49.4800], [8.4500, 49.5000]]
+    },
+    {
+      "id": "str-004",
+      "road": "L740",
+      "segment": "Hamm-Heessen — Ahlen",
+      "type": "general_prohibition",
+      "max_width_m": 2.5,
+      "max_weight_t": 12,
+      "max_height_m": 3.5,
+      "reason": "Enge Ortsdurchfahrt mit mehreren Brückenbauwerken, unzureichende Tragfähigkeit",
+      "source": "Kreis Warendorf",
+      "coordinates": [[7.8800, 51.7200], [7.9800, 51.7500]]
+    },
+    {
+      "id": "str-005",
+      "road": "B1",
+      "segment": "Bielefeld — Detmold (Teilabschnitt Enger)",
+      "type": "height_restriction",
+      "max_width_m": null,
+      "max_weight_t": null,
+      "max_height_m": 3.7,
+      "reason": "Eisenbahnüberführung mit Höhenbeschränkung 3,70 m — Beschilderung beachten",
+      "source": "Straßen.NRW / DB Netz AG",
+      "coordinates": [[8.5500, 52.1400], [8.7000, 52.0200]]
+    },
+    {
+      "id": "str-006",
+      "road": "A45",
+      "segment": "Talbrücke Rahmede — AS Lüdenscheid",
+      "type": "general_prohibition",
+      "max_width_m": null,
+      "max_weight_t": 0,
+      "max_height_m": null,
+      "reason": "Talbrücke Rahmede vollgesperrt seit Dezember 2021 wegen Einsturzgefahr. Umleitung über A4/A1.",
+      "source": "Straßen.NRW / BMDV",
+      "coordinates": [[7.6200, 51.2100], [7.6800, 51.2400]]
+    },
+    {
+      "id": "str-007",
+      "road": "B207",
+      "segment": "Puttgarden — Fehmarnsundbrücke",
+      "type": "height_restriction",
+      "max_width_m": 3.5,
+      "max_weight_t": 40,
+      "max_height_m": 3.8,
+      "reason": "Fehmarnsundbrücke — Windsperrungen und Höhenbeschränkung für Hohe Fahrzeuge",
+      "source": "Landesbetrieb Straßenbau Schleswig-Holstein",
+      "coordinates": [[11.1800, 54.3900], [11.2100, 54.4400]]
+    },
+    {
+      "id": "str-008",
+      "road": "K14",
+      "segment": "Wuppertal-Elberfeld — Wuppertal-Barmen",
+      "type": "width_restriction",
+      "max_width_m": 2.55,
+      "max_weight_t": 7.5,
+      "max_height_m": 3.3,
+      "reason": "Historische Stadtbrücke über Wupper, nicht für Schwertransport geeignet",
+      "source": "Stadt Wuppertal",
+      "coordinates": [[7.1500, 51.2600], [7.2100, 51.2700]]
+    }
+  ]
+}

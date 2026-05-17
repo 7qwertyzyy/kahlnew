@@ -28,6 +28,16 @@ class PermitBase(BaseModel):
     kennzeichen: list[str] = Field(default_factory=list)
     strecke: list[str] = Field(default_factory=list)
     erkannte_strassen: list[str] = Field(default_factory=list)
+    autobahnen: list[str] = Field(default_factory=list)
+    bundesstrassen: list[str] = Field(default_factory=list)
+    kreisstrassen: list[str] = Field(default_factory=list)
+    anschlussstellen: list[str] = Field(default_factory=list)
+    strassen_sequenz: list[str] = Field(default_factory=list)
+    strecke_volltext: Optional[str] = None
+    dokument_volltext: Optional[str] = None
+    auflagen_volltext: Optional[str] = None
+    start_location_name: Optional[str] = None
+    ziel_location_name: Optional[str] = None
     auflagen: list[str] = Field(default_factory=list)
     auflagen_kurzfassung: Optional[str] = None
     behoerden: list[str] = Field(default_factory=list)

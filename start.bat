@@ -4,10 +4,10 @@ echo  Kahl Route ^& Permit Intelligence System
 echo ============================================
 echo.
 echo Starting Backend (FastAPI)...
-start "Backend - FastAPI" cmd /k "cd /d %~dp0backend && pip install -r requirements.txt -q && uvicorn main:app --reload --port 8000"
+start "Backend - FastAPI" cmd /k "cd /d %~dp0backend && uvicorn main:app --reload --port 8000"
 timeout /t 3 /nobreak >nul
 echo Starting Frontend (Next.js)...
-start "Frontend - Next.js" cmd /k "cd /d %~dp0frontend && npm install && npm run dev"
+start "Frontend - Next.js" cmd /k "cd /d %~dp0frontend && npm run dev"
 echo.
 echo ============================================
 echo  Backend:  http://localhost:8000
