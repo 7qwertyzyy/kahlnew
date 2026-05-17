@@ -618,7 +618,7 @@ export async function POST(req: Request) {
     // _bbox als WKT mit SRID übergeben – PostGIS akzeptiert das als geometry
     if (bbox) rpcPayload._bbox = bboxToWkt4326(bbox);
 
-    console.log("[ROADWORKS] calling RPC", {
+    console.log("[ROADWORKS] calling RPC + WFS parallel", {
       ts,
       tz,
       bbox,
@@ -629,29 +629,42 @@ export async function POST(req: Request) {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
 
-    let resp: Response;
-    let text = "";
+    // RPC und WFS-Abfrage parallel starten
+    const rpcPromise = fetch(rpcUrl, {
+      method: "POST",
+      headers: {
+        apikey: SUPABASE_SERVICE_ROLE,
+        Authorization: `Bearer ${SUPABASE_SERVICE_ROLE}`,
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        Prefer: "return=representation",
+      },
+      body: JSON.stringify(rpcPayload),
+      cache: "no-store",
+      signal: controller.signal,
+    }).then(async (r) => ({ ok: r.ok, status: r.status, text: await r.text().catch(() => "") }))
+      .catch((e: any) => ({ ok: false as const, status: 0, text: "", error: e }));
+
+    const wfsPromise = fetchAdditionalWfsRoadworks({
+      supabaseUrl: SUPABASE_URL,
+      serviceKey: SUPABASE_SERVICE_ROLE,
+      ts,
+      bbox,
+      only_motorways,
+    });
+
+    let rpcResult: { ok: boolean; status: number; text: string; error?: any };
+    let wfsResult: Awaited<ReturnType<typeof fetchAdditionalWfsRoadworks>>;
 
     try {
-      resp = await fetch(rpcUrl, {
-        method: "POST",
-        headers: {
-          apikey: SUPABASE_SERVICE_ROLE,
-          Authorization: `Bearer ${SUPABASE_SERVICE_ROLE}`,
-          "Content-Type": "application/json",
-          Accept: "application/json",
-          Prefer: "return=representation",
-        },
-        body: JSON.stringify(rpcPayload),
-        cache: "no-store",
-        signal: controller.signal,
-      });
+      [rpcResult, wfsResult] = await Promise.all([rpcPromise, wfsPromise]);
+    } finally {
+      clearTimeout(timer);
+    }
 
-      text = await resp.text().catch(() => "");
-    } catch (e: any) {
-      const msg = String(e);
-      const isAbort = e?.name === "AbortError" || msg.toLowerCase().includes("abort");
-      console.error("[ROADWORKS] RPC fetch failed:", isAbort ? "TIMEOUT" : msg);
+    if (rpcResult.error) {
+      const isAbort = rpcResult.error?.name === "AbortError" || String(rpcResult.error).toLowerCase().includes("abort");
+      console.error("[ROADWORKS] RPC fetch failed:", isAbort ? "TIMEOUT" : String(rpcResult.error));
       return NextResponse.json(
         emptyFC({
           ...metaBase,
@@ -666,14 +679,14 @@ export async function POST(req: Request) {
         }),
         { status: 200 }
       );
-    } finally {
-      clearTimeout(timer);
     }
 
-    if (!resp.ok) {
+    const { ok: rpcOk, status: rpcStatus, text } = rpcResult;
+
+    if (!rpcOk) {
       let errBody: any = {};
       try { errBody = JSON.parse(text); } catch { /* ignore */ }
-      if (errBody?.code === "PGRST205" || errBody?.code === "42883" || resp.status === 404) {
+      if (errBody?.code === "PGRST205" || errBody?.code === "42883" || rpcStatus === 404) {
         console.warn("[ROADWORKS] Supabase RPC not found — falling back to Autobahn API");
         const fallback = await fetchAutobahnRoadworks({ ts, bbox, only_motorways });
         return NextResponse.json({
@@ -681,7 +694,7 @@ export async function POST(req: Request) {
           meta: { ...metaBase, status: "OK", ts, tz, rw_bbox: bbox, only_motorways, fetched: fallback.features.length, used: fallback.features.length, source: "autobahn_api", timeout_ms_used: timeoutMs },
         });
       }
-      console.error("[ROADWORKS] RPC HTTP error:", resp.status, text.slice(0, 300));
+      console.error("[ROADWORKS] RPC HTTP error:", rpcStatus, text.slice(0, 300));
       return NextResponse.json(
         emptyFC({
           ...metaBase,
@@ -690,7 +703,7 @@ export async function POST(req: Request) {
           tz,
           rw_bbox: bbox,
           only_motorways,
-          rpc_status: resp.status,
+          rpc_status: rpcStatus,
           error: "RPC failed",
           timeout_ms_used: timeoutMs,
         }),
@@ -735,14 +748,6 @@ export async function POST(req: Request) {
     console.log("[ROADWORKS] fetched features:", rawFeatures.length);
 
     const enrichedFeatures = rawFeatures.map(enrichFeatureProperties);
-
-    const wfsResult = await fetchAdditionalWfsRoadworks({
-      supabaseUrl: SUPABASE_URL,
-      serviceKey: SUPABASE_SERVICE_ROLE,
-      ts,
-      bbox,
-      only_motorways,
-    });
 
     if (!wfsResult.ok) {
       console.warn("[ROADWORKS] WFS roadworks fetch failed:", wfsResult.error);

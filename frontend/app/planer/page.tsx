@@ -732,6 +732,8 @@ export default function Page() {
   const mapRef = useRef<Map | null>(null);
   const mapLoadedRef = useRef(false);
   const rwAbortRef = useRef<AbortController | null>(null);
+  const rwDebounceRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const lastRwBboxRef = useRef<[number, number, number, number] | null>(null);
   const permitRouteAbortRef = useRef<AbortController | null>(null);
   const containerRef = useRef<HTMLDivElement | null>(null);
   const controlMarkersRef = useRef<maplibregl.Marker[]>([]);
@@ -1714,6 +1716,18 @@ export default function Page() {
     const b = map.getBounds();
     const bbox: [number, number, number, number] = [b.getWest(), b.getSouth(), b.getEast(), b.getNorth()];
 
+    // BBox-Cache: nur neu laden wenn die Karte weit genug bewegt wurde (~1km bei mittlerem Zoom)
+    const prev = lastRwBboxRef.current;
+    if (prev) {
+      const moved =
+        Math.abs(prev[0] - bbox[0]) > 0.01 ||
+        Math.abs(prev[1] - bbox[1]) > 0.01 ||
+        Math.abs(prev[2] - bbox[2]) > 0.01 ||
+        Math.abs(prev[3] - bbox[3]) > 0.01;
+      if (!moved) return;
+    }
+    lastRwBboxRef.current = bbox;
+
     const local = new Date(whenIsoLocal);
     const ts = new Date(local.getTime() - local.getTimezoneOffset() * 60000).toISOString();
     const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || "Europe/Berlin";
@@ -1804,12 +1818,18 @@ export default function Page() {
   useEffect(() => {
     const m = mapRef.current;
     if (!m) return;
-    const handler = () => refreshRoadworks();
+    const handler = () => {
+      if (rwDebounceRef.current) clearTimeout(rwDebounceRef.current);
+      rwDebounceRef.current = setTimeout(() => refreshRoadworks(), 300);
+    };
     m.on("moveend", handler);
+    // BBox-Cache invalidieren wenn Zeit oder Sichtbarkeit sich ändert
+    lastRwBboxRef.current = null;
     const t = setTimeout(() => refreshRoadworks(), 600);
     return () => {
       m.off("moveend", handler);
       clearTimeout(t);
+      if (rwDebounceRef.current) clearTimeout(rwDebounceRef.current);
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [showRoadworks, whenIsoLocal]);

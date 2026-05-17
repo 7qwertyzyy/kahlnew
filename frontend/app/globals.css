@@ -2,36 +2,62 @@
 
 :root {
   --color-bg: #ffffff;
-  --color-surface: #f8f8f8;
-  --color-surface-strong: #eeeeee;
-  --color-text: #1a1a1a;
-  --color-text-muted: #525252;
-  --color-border: #d8d8d8;
-  --color-primary: #b5131d;
-  --color-primary-hover: #951018;
-  --color-secondary: #004f36;
-  --color-secondary-hover: #003b28;
+  --color-surface: #f8f9fb;
+  --color-surface-strong: #eef1f5;
+  --color-text: #1a1a2e;
+  --color-text-muted: #5a6070;
+  --color-border: #dde3ec;
+  --color-primary: #1a73e8;
+  --color-primary-hover: #1557b0;
+  --color-primary-soft: #e8f0fe;
+  --color-secondary: #0d6e4f;
+  --color-secondary-hover: #0a5740;
   --color-danger-surface: #fff1f1;
   --color-danger-text: #8f0f17;
   --logo-filter: none;
+
+  /* Transitions */
+  --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-base: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 360ms cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows */
+  --shadow-sm: 0 1px 3px rgba(26, 80, 160, 0.08), 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-md: 0 4px 12px rgba(26, 80, 160, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06);
+  --shadow-primary: 0 4px 14px rgba(26, 115, 232, 0.28), 0 1px 4px rgba(26, 115, 232, 0.16);
+
   color-scheme: light;
 }
 
 .dark {
-  --color-bg: #121212;
-  --color-surface: #1e1e1e;
-  --color-surface-strong: #2a2a2a;
-  --color-text: #eeeeee;
-  --color-text-muted: #b8b8b8;
-  --color-border: #3a3a3a;
-  --color-primary: #b5131d;
-  --color-primary-hover: #d01824;
-  --color-secondary: #004f36;
-  --color-secondary-hover: #05734f;
-  --color-danger-surface: rgba(181, 19, 29, 0.16);
+  --color-bg: #10141c;
+  --color-surface: #181e2a;
+  --color-surface-strong: #222b3a;
+  --color-text: #e8edf5;
+  --color-text-muted: #8d99ae;
+  --color-border: #2e3a4e;
+  --color-primary: #4f9bff;
+  --color-primary-hover: #6ab0ff;
+  --color-primary-soft: rgba(79, 155, 255, 0.15);
+  --color-secondary: #1db87a;
+  --color-secondary-hover: #22d48e;
+  --color-danger-surface: rgba(180, 30, 40, 0.18);
   --color-danger-text: #ff9aa1;
   --logo-filter: brightness(1.12) contrast(1.08);
+
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px 2px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 14px rgba(0, 0, 0, 0.32), 0 1px 4px rgba(0, 0, 0, 0.2);
+  --shadow-primary: 0 4px 14px rgba(79, 155, 255, 0.3), 0 1px 4px rgba(79, 155, 255, 0.18);
+
   color-scheme: dark;
+}
+
+/* ── Base ─────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
 html,
@@ -43,10 +69,34 @@ body,
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Inter", sans-serif;
   background: var(--color-bg);
   color: var(--color-text);
+  -webkit-font-smoothing: antialiased;
 }
+
+/* ── Global interactive transitions ─────────────────────────────────── */
+
+a,
+button,
+input,
+select,
+textarea,
+[role="button"] {
+  transition:
+    color var(--transition-fast),
+    background-color var(--transition-fast),
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    opacity var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+button:active:not(:disabled) {
+  transform: scale(0.97);
+}
+
+/* ── App shell ─────────────────────────────────── */
 
 .app-body {
   background: var(--color-bg);
@@ -55,28 +105,246 @@ body {
 
 .brand-logo {
   filter: var(--logo-filter);
+  transition: opacity var(--transition-fast);
 }
+
+/* ── Nav / Theme toggle ─────────────────────────────────── */
 
 .nav-theme-toggle {
   background: var(--color-surface-strong);
   border: 1px solid var(--color-border);
+  transition: background var(--transition-fast), border-color var(--transition-fast);
+}
+
+.nav-theme-toggle:hover {
+  background: var(--color-border);
 }
 
 .nav-theme-thumb {
   background: var(--color-primary);
+  transition: background var(--transition-fast), transform var(--transition-base);
 }
 
-/* Legacy – kept for reference */
 .theme-switch {
   border: 1px solid var(--color-border);
   background: var(--color-surface-strong);
   color: var(--color-text);
 }
+
 .theme-switch-thumb {
   background: var(--color-primary);
 }
 
-/* Existing Tailwind utility compatibility for global theme rollout */
+/* ── Cards & surfaces ─────────────────────────────────── */
+
+.card {
+  border-radius: 16px;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-base), border-color var(--transition-base);
+}
+
+.card:hover {
+  box-shadow: var(--shadow-md);
+}
+
+/* ── Inputs ─────────────────────────────────── */
+
+input,
+select,
+textarea {
+  background-color: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border-color: var(--color-border) !important;
+  border-radius: 10px;
+  transition:
+    border-color var(--transition-fast),
+    box-shadow var(--transition-fast),
+    background-color var(--transition-fast) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.14) !important;
+}
+
+.dark input:focus,
+.dark select:focus,
+.dark textarea:focus {
+  box-shadow: 0 0 0 3px rgba(79, 155, 255, 0.18) !important;
+}
+
+/* ── Sidebar scrollbar ─────────────────────────────────── */
+
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: var(--color-border);
+  border-radius: 2px;
+  transition: background var(--transition-fast);
+}
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: var(--color-text-muted);
+}
+
+/* ── Animations ─────────────────────────────────── */
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes shimmer {
+  0%   { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulse-ring {
+  0%   { transform: scale(0.9); opacity: 0.7; }
+  100% { transform: scale(1.4); opacity: 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--transition-base) ease both;
+}
+
+.animate-slide-up {
+  animation: slideUp var(--transition-slow) cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Skeleton loading */
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-strong) 25%,
+    var(--color-surface) 50%,
+    var(--color-surface-strong) 75%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+  border-radius: 8px;
+}
+
+/* ── Mapbox geocoder overrides ─────────────────────────────────── */
+
+.mapboxgl-ctrl-geocoder {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-shadow: none !important;
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 12px !important;
+  min-width: unset !important;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast) !important;
+}
+
+.mapboxgl-ctrl-geocoder:focus-within {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.14) !important;
+}
+
+.mapboxgl-ctrl-geocoder input {
+  color: var(--color-text) !important;
+  background: transparent !important;
+  font-size: 0.875rem !important;
+  height: 36px !important;
+}
+
+.mapboxgl-ctrl-geocoder input::placeholder {
+  color: var(--color-text-muted) !important;
+}
+
+.mapboxgl-ctrl-geocoder .suggestions {
+  background: var(--color-surface) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 12px !important;
+  color: var(--color-text) !important;
+  box-shadow: var(--shadow-md) !important;
+}
+
+.mapboxgl-ctrl-geocoder .suggestions li:hover,
+.mapboxgl-ctrl-geocoder .suggestions .active > a {
+  background: var(--color-primary-soft) !important;
+  color: var(--color-primary) !important;
+}
+
+.mapboxgl-ctrl-geocoder .suggestions a {
+  color: var(--color-text) !important;
+  transition: background var(--transition-fast) !important;
+}
+
+.mapboxgl-ctrl-geocoder--icon {
+  fill: var(--color-text-muted) !important;
+  top: 8px !important;
+}
+
+.mapboxgl-ctrl-geocoder--button {
+  background: transparent !important;
+}
+
+.mapboxgl-ctrl-geocoder--icon-search {
+  top: 8px !important;
+  left: 7px !important;
+}
+
+/* ── Popup ─────────────────────────────────── */
+
+.mapboxgl-popup-content {
+  background: var(--color-surface) !important;
+  color: var(--color-text) !important;
+  border: 1px solid var(--color-border) !important;
+  border-radius: 14px !important;
+  padding: 0.85rem !important;
+  max-width: 290px !important;
+  font-size: 0.8rem !important;
+  line-height: 1.4 !important;
+  box-shadow: var(--shadow-md) !important;
+  animation: slideUp 200ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.mapboxgl-popup-tip {
+  border-top-color: var(--color-surface) !important;
+  border-bottom-color: var(--color-surface) !important;
+}
+
+.mapboxgl-popup-close-button {
+  color: var(--color-text-muted) !important;
+  font-size: 1rem !important;
+  line-height: 1 !important;
+  padding: 4px 6px !important;
+  border-radius: 6px !important;
+  transition: background var(--transition-fast), color var(--transition-fast) !important;
+}
+
+.mapboxgl-popup-close-button:hover {
+  background: var(--color-surface-strong) !important;
+  color: var(--color-text) !important;
+}
+
+/* ── Tailwind utility overrides ─────────────────────────────────── */
+
 .bg-gray-950,
 .bg-gray-900 {
   background-color: var(--color-surface) !important;
@@ -149,97 +417,4 @@ body {
 }
 .border-b-gray-700 {
   border-bottom-color: var(--color-border) !important;
-}
-input,
-select,
-textarea {
-  background-color: var(--color-surface) !important;
-  color: var(--color-text) !important;
-  border-color: var(--color-border) !important;
-}
-input::placeholder,
-textarea::placeholder {
-  color: var(--color-text-muted) !important;
-}
-
-/* Sidebar scrollbar */
-.sidebar-scroll::-webkit-scrollbar {
-  width: 4px;
-}
-.sidebar-scroll::-webkit-scrollbar-track {
-  background: transparent;
-}
-.sidebar-scroll::-webkit-scrollbar-thumb {
-  background: var(--color-border);
-  border-radius: 2px;
-}
-
-/* Mapbox geocoder theme overrides */
-.mapboxgl-ctrl-geocoder {
-  width: 100% !important;
-  max-width: 100% !important;
-  box-shadow: none !important;
-  background: var(--color-surface) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0.5rem !important;
-  min-width: unset !important;
-}
-.mapboxgl-ctrl-geocoder input {
-  color: var(--color-text) !important;
-  background: transparent !important;
-  font-size: 0.875rem !important;
-  height: 36px !important;
-}
-.mapboxgl-ctrl-geocoder input::placeholder {
-  color: var(--color-text-muted) !important;
-}
-.mapboxgl-ctrl-geocoder .suggestions {
-  background: var(--color-surface) !important;
-  border: 1px solid var(--color-border) !important;
-  color: var(--color-text) !important;
-}
-.mapboxgl-ctrl-geocoder .suggestions li:hover,
-.mapboxgl-ctrl-geocoder .suggestions .active > a {
-  background: var(--color-surface-strong) !important;
-  color: var(--color-text) !important;
-}
-.mapboxgl-ctrl-geocoder .suggestions a {
-  color: var(--color-text) !important;
-}
-.mapboxgl-ctrl-geocoder--icon {
-  fill: var(--color-text-muted) !important;
-  top: 8px !important;
-}
-.mapboxgl-ctrl-geocoder--button {
-  background: transparent !important;
-}
-.mapboxgl-ctrl-geocoder--icon-search {
-  top: 8px !important;
-  left: 7px !important;
-}
-
-/* Popup theme */
-.mapboxgl-popup-content {
-  background: var(--color-surface) !important;
-  color: var(--color-text) !important;
-  border: 1px solid var(--color-border) !important;
-  border-radius: 0.5rem !important;
-  padding: 0.75rem !important;
-  max-width: 280px !important;
-  font-size: 0.8rem !important;
-  line-height: 1.4 !important;
-}
-.mapboxgl-popup-tip {
-  border-top-color: var(--color-surface) !important;
-  border-bottom-color: var(--color-surface) !important;
-}
-.mapboxgl-popup-close-button {
-  color: var(--color-text-muted) !important;
-  font-size: 1rem !important;
-  line-height: 1 !important;
-  padding: 4px 6px !important;
-}
-.mapboxgl-popup-close-button:hover {
-  background: var(--color-surface-strong) !important;
-  color: var(--color-text) !important;
 }
