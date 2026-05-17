@@ -32,6 +32,14 @@ def init_db():
         conn.executescript(schema)
         # Migrate existing DB: add new columns if missing
         _migrate(conn)
+        # Seed demo data on fresh DB (important for Vercel where /tmp is ephemeral)
+        try:
+            import sys as _sys
+            _sys.path.insert(0, str(Path(__file__).parent.parent))
+            from seed_permits import seed_db as _seed_db
+            _seed_db(conn)
+        except Exception:
+            pass
         conn.commit()
 
 

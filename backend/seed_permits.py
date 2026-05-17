@@ -864,6 +864,49 @@ PERMITS = [
 ]
 
 
+_INSERT_SQL = """
+    INSERT INTO permits (
+        dateiname, genehmigungsnummer, antragsnummer, genehmigungsart,
+        kunde, startort, start_adresse, start_plz, start_bundesland,
+        zielort, ziel_adresse, ziel_plz, ziel_bundesland,
+        gueltig_von, gueltig_bis,
+        fahrzeug_laenge_m, fahrzeug_breite_m, fahrzeug_hoehe_m,
+        gesamtgewicht_t, achslast_t,
+        kennzeichen, strecke, erkannte_strassen,
+        auflagen, auflagen_kurzfassung, behoerden, besonderheiten,
+        begleitfahrzeug_erforderlich, polizei_erforderlich, nachtfahrt_erforderlich,
+        auflagenstaerke, auflagenstaerke_stufe,
+        risikostufe, risiko_begruendung,
+        ki_zusammenfassung, fahrer_hinweise, dispo_hinweise,
+        confidence, status
+    ) VALUES (
+        :dateiname, :genehmigungsnummer, :antragsnummer, :genehmigungsart,
+        :kunde, :startort, :start_adresse, :start_plz, :start_bundesland,
+        :zielort, :ziel_adresse, :ziel_plz, :ziel_bundesland,
+        :gueltig_von, :gueltig_bis,
+        :fahrzeug_laenge_m, :fahrzeug_breite_m, :fahrzeug_hoehe_m,
+        :gesamtgewicht_t, :achslast_t,
+        :kennzeichen, :strecke, :erkannte_strassen,
+        :auflagen, :auflagen_kurzfassung, :behoerden, :besonderheiten,
+        :begleitfahrzeug_erforderlich, :polizei_erforderlich, :nachtfahrt_erforderlich,
+        :auflagenstaerke, :auflagenstaerke_stufe,
+        :risikostufe, :risiko_begruendung,
+        :ki_zusammenfassung, :fahrer_hinweise, :dispo_hinweise,
+        :confidence, :status
+    )
+"""
+
+
+def seed_db(conn: sqlite3.Connection) -> None:
+    """Insert demo permits into an open connection if the table is empty."""
+    count = conn.execute("SELECT COUNT(*) FROM permits").fetchone()[0]
+    if count > 0:
+        return
+    cur = conn.cursor()
+    for p in PERMITS:
+        cur.execute(_INSERT_SQL, p)
+
+
 def insert_permits():
     conn = sqlite3.connect(DB_PATH)
     cur = conn.cursor()
@@ -879,37 +922,7 @@ def insert_permits():
             skipped += 1
             continue
 
-        cur.execute("""
-            INSERT INTO permits (
-                dateiname, genehmigungsnummer, antragsnummer, genehmigungsart,
-                kunde, startort, start_adresse, start_plz, start_bundesland,
-                zielort, ziel_adresse, ziel_plz, ziel_bundesland,
-                gueltig_von, gueltig_bis,
-                fahrzeug_laenge_m, fahrzeug_breite_m, fahrzeug_hoehe_m,
-                gesamtgewicht_t, achslast_t,
-                kennzeichen, strecke, erkannte_strassen,
-                auflagen, auflagen_kurzfassung, behoerden, besonderheiten,
-                begleitfahrzeug_erforderlich, polizei_erforderlich, nachtfahrt_erforderlich,
-                auflagenstaerke, auflagenstaerke_stufe,
-                risikostufe, risiko_begruendung,
-                ki_zusammenfassung, fahrer_hinweise, dispo_hinweise,
-                confidence, status
-            ) VALUES (
-                :dateiname, :genehmigungsnummer, :antragsnummer, :genehmigungsart,
-                :kunde, :startort, :start_adresse, :start_plz, :start_bundesland,
-                :zielort, :ziel_adresse, :ziel_plz, :ziel_bundesland,
-                :gueltig_von, :gueltig_bis,
-                :fahrzeug_laenge_m, :fahrzeug_breite_m, :fahrzeug_hoehe_m,
-                :gesamtgewicht_t, :achslast_t,
-                :kennzeichen, :strecke, :erkannte_strassen,
-                :auflagen, :auflagen_kurzfassung, :behoerden, :besonderheiten,
-                :begleitfahrzeug_erforderlich, :polizei_erforderlich, :nachtfahrt_erforderlich,
-                :auflagenstaerke, :auflagenstaerke_stufe,
-                :risikostufe, :risiko_begruendung,
-                :ki_zusammenfassung, :fahrer_hinweise, :dispo_hinweise,
-                :confidence, :status
-            )
-        """, p)
+        cur.execute(_INSERT_SQL, p)
         inserted += 1
 
     conn.commit()
